@@ -11,6 +11,8 @@ export class AddItem extends Component {
     fields: React.PropTypes.object.isRequired,
     items: React.PropTypes.array,
     addItem: React.PropTypes.func,
+    addNewItemToServer: React.PropTypes.func,
+    fetchItems: React.PropTypes.func,
   };
 
   constructor(props) {
@@ -20,12 +22,19 @@ export class AddItem extends Component {
   onAdd = (event) => {
     if (this.props.fields.name.value) {
       /* add item*/
-      this.props.addItem(this.props.fields);
+      // this.props.addItem(this.props.fields);
+
+      const node = this.refs['todo-input'];
+      this.props.addNewItemToServer(node.value);
 
       /* reset form */
       this.props.dispatch(reset('addItem'));
     }
     event.preventDefault();
+  };
+
+  onFetchData = (event) => {
+    this.props.fetchItems({});
   };
 
   render() {
@@ -38,6 +47,7 @@ export class AddItem extends Component {
         <div className="form-group">
           <input
             type="text"
+            ref="todo-input"
             className="form-control"
             placeholder="Enter something"
             {...name}
@@ -46,6 +56,11 @@ export class AddItem extends Component {
         <div className="form-group">
           <button className="btn btn-default" onClick={this.onAdd}>
             Add item
+          </button>
+        </div>
+        <div className="form-group">
+          <button className="btn btn-inverse" onClick={this.onFetchData}>
+            Fetch Item
           </button>
         </div>
       </form>
