@@ -9,6 +9,7 @@ export class BarChart extends Component {
         title: React.PropTypes.string,
         color: React.PropTypes.string,
         width: React.PropTypes.number,
+        id: React.PropTypes.string,
     };
 
     initChart() {
@@ -29,8 +30,9 @@ export class BarChart extends Component {
         const chartStyle = {
             height: '250px',
         };
+        const chartId = this.props.id || "barChart";
         return (
-            <div id="myfirstchart" ref="myfirstchart" style={chartStyle}>
+            <div id={chartId} ref={chartId} style={chartStyle}>
 			{this.initChart()}
         	</div>
         );
