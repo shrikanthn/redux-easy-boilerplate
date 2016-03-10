@@ -28,8 +28,14 @@ app.post('/api', function root(req, res) {
     }
 });
 
-app.get('/api/getAllAnswers/', function root(req, res) {
+app.get('/api/getAllSurveyResults', function root(req, res) {
     dbObj.getAllSurveyResults(res);
+});
+app.get('/api/getAllSurveyCount', function root(req, res) {
+    dbObj.getAllSurveyCount(res);
+});
+app.get('/api/getTeamAverages', function root(req, res) {
+    dbObj.getTeamAverages(res);
 });
 
 app.post('/postCSV', function root(req, res) {
@@ -38,8 +44,6 @@ app.post('/postCSV', function root(req, res) {
 
 
         var parse = require('csv-parse');
-        // require('should');
-
         
         var input = '#Welcome\n"1","2","3","4"\n"a","b","c","d"';
         parse(req.body.text, {comment: '#', delimiter: '\t'}, function(err, output){
