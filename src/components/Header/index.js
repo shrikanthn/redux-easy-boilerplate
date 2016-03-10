@@ -27,6 +27,9 @@ export class Header extends Component {
                 <Link to="/testdb" activeClassName="active">
                   TestDB
                 </Link>
+                <Link to="/surveyResults" activeClassName="active">
+                  Survey Results
+                </Link>
               </nav>
             </div>
 
