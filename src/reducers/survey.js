@@ -13,12 +13,24 @@ const initialState = {
         a4: 0,
         ts: 0,
     }, ],
+    averages: [{
+        a1: 0,
+        a2: 0,
+        a3: 0,
+        a4: 0,
+        ts: 0,
+    }, ],
+    answer_count_per_survey: [{
+        survey_date: 0,
+        count: 0,
+    }, ],
     csvDump: 'test',
+    currentSprint: 0,
 };
 
 export function survey(state = initialState, action) {
     switch (action.type) {
-        case 'SUBMIT_SUREVY_ANSWER':
+        case 'SUBMIT_SURVEY_ANSWER':
             return {
                 ...state,
                 answers: [
@@ -38,6 +50,12 @@ export function survey(state = initialState, action) {
                 csvDump: action.csvDump,
             };
 
+        case 'SET_CURRENT_SPRINT':
+            return {
+                ...state,
+                currentSprint: action.currentSprint,
+            };
+
         case 'POST_ANSWERS':
             return {
                 ...state,
@@ -46,7 +64,7 @@ export function survey(state = initialState, action) {
         case 'RECEIVE_AVG':
             return {
                 ...state,
-                answers: action.answers,
+                averages: action.averages,
             };
 
         default:
