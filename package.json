@@ -8,6 +8,7 @@
     "build:production": "npm run clean && npm run build",
     "lint": "eslint src",
     "start": "node bin/server.js",
+    "startapi": "node bin/apiserver.js",
     "test": "karma start"
   },
   "repository": {
