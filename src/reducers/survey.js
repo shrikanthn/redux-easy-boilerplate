@@ -1,16 +1,16 @@
-export const questionMap = {
-    q1: 'How fun was this sprint',
-    q2: 'How satisfied are you with your performance this sprint',
-    q3: 'How satisfied are you with the planning for this sprint',
-    q4: 'How well were you able to focus during this sprint',
+export const QUESTION_MAP = {
+    a1: 'How fun was this sprint',
+    a2: 'How satisfied are you with your performance this sprint',
+    a3: 'How satisfied are you with the planning for this sprint',
+    a4: 'How well were you able to focus during this sprint',
 };
 
 const initialState = {
     answers: [{
-        q1: 0,
-        q2: 0,
-        q3: 0,
-        q4: 0,
+        a1: 0,
+        a2: 0,
+        a3: 0,
+        a4: 0,
         ts: 0,
     }, ],
     csvDump: 'test',
@@ -23,10 +23,10 @@ export function survey(state = initialState, action) {
                 ...state,
                 answers: [
                     ...state.answers, {
-                        q1: action.answers.q1,
-                        q2: action.answers.q2,
-                        q3: action.answers.q3,
-                        q4: action.answers.q4,
+                        a1: action.answers.a1,
+                        a2: action.answers.a2,
+                        a3: action.answers.a3,
+                        a4: action.answers.a4,
                         ts: action.answers.ts,
                     },
                 ],
@@ -41,6 +41,12 @@ export function survey(state = initialState, action) {
         case 'POST_ANSWERS':
             return {
                 ...state,
+            };
+
+        case 'RECEIVE_AVG':
+            return {
+                ...state,
+                answers: action.answers,
             };
 
         default:
