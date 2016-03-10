@@ -61,27 +61,12 @@ export class TestDB extends Component {
         this.props.chartsAction.addBarChartData(sampleData);
     };
 
-    getTeamAverages = (event) => {
-        this.props.surveyAction.fetchAverages({});
-    };
-
     submitData = (event) => {
     	
     };
 
     handleChange = (event) => {
 		this.props.surveyAction.dumpCSV(event.target.value);
-	};
-
-	formatDataForBarChart(key) {
-		let arr = [];
-		if (!!this.props.survey.answers && this.props.survey.answers.length > 1) {
-			for (var i in this.props.survey.answers) {
-				let obj1 = this.props.survey.answers[i];
-				arr.push({ label: obj1.ts, value: obj1[key] });
-			}
-		}
-		return arr;
 	};
 
     render() {
@@ -99,27 +84,11 @@ export class TestDB extends Component {
 			    </div>
 			    <div className='row-fluid'>
 			        <button ref="btnRenderSampleChart" className='btn btn-primary' onClick={this.renderSampleChart}>Sample Chart</button> &nbsp;
-			        <button ref="btnTeamAverages" className='btn btn-primary' onClick={this.getTeamAverages}>Team Averages</button> &nbsp;
 			        <button ref="btnGet" className='btn btn-primary' onClick={this.renderSampleChart2}>Sample Chart2</button> &nbsp;
 			        <button ref="btnSubmitData" className='btn btn-success' onClick={this.submitData}>Submit</button>
 			    </div>
 			    <div className='row-fluid'>
 			        <BarChart barChart={this.props.charts.barChart} />
-			    </div>
-			    <div className='row-fluid'>
-			        <h3>Team Averages</h3>
-			        <div className='row-fluid'>
-			            <BarChart title='Fun' color='#93B69A' barChart={this.formatDataForBarChart( 'a1')} />
-			        </div>
-			        <div className='row-fluid'>
-			            <BarChart title='Focus' color='#F78F20' barChart={this.formatDataForBarChart( 'a4')} />
-			        </div>
-			        <div className='row-fluid'>
-			            <BarChart title='Performance' color='#1F5463' barChart={this.formatDataForBarChart( 'a2')} />
-			        </div>
-			        <div className='row-fluid'>
-			            <BarChart title='Planning' barChart={this.formatDataForBarChart( 'a3')} />
-			        </div>
 			    </div>
 			</div>
         );
