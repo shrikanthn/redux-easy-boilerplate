@@ -1,8 +1,10 @@
-const AVG_URL = 'http://localhost:9999/api/getTeamAverages';
+const API_URL = 'http://localhost:9999/api';
+const AVG_URL = API_URL + '/getTeamAverages';
+const COUNT_URL = API_URL + '/getAllSurveyCount';
 
 export function submitSurveyAnswer(surveyAnswers) {
     return {
-        type: 'SUBMIT_SUREVY_ANSWER',
+        type: 'SUBMIT_SURVEY_ANSWER',
         answers : surveyAnswers,
     };
 }
@@ -25,7 +27,7 @@ export function receiveAverages(survey, jsonData) {
     return {
         type: 'RECEIVE_AVG',
         survey,
-        answers: jsonData,
+        averages: jsonData,
         receivedAt: Date.now(),
     };
 }
@@ -39,9 +41,38 @@ export function fetchAverages(survey) {
         return fetch(AVG_URL)
             .then(response => response.json())
             .then(data =>
-                // We can dispatch many times!
-                // Here, we update the app state with the results of the API call.
                 dispatch(receiveAverages(survey, data))
             );
+    };
+}
+
+export function receiveAnswerCount(survey, jsonData) {
+    console.log('end fetch on : ' + Date.now());
+    return {
+        type: 'RECEIVE_ANSWER_COUNT',
+        survey,
+        answer_count: jsonData,
+        receivedAt: Date.now(),
+    };
+}
+
+export function fetchAnswerCount(survey) {
+
+    return function(dispatch) {
+
+        dispatch(requestItems());
+
+        return fetch(COUNT_URL)
+            .then(response => response.json())
+            .then(data =>
+                dispatch(receiveAnswerCount(survey, data))
+            );
+    };
+}
+
+export function setCurrentSprint(sprint_date) {
+    return {
+        type: 'SET_CURRENT_SPRINT',
+        currentSprint : sprint_date,
     };
 }
