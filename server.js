@@ -4,9 +4,6 @@ const app = express();
 const bodyParser = require('body-parser');
 
 app.use(require('morgan')('short'));
-// app.use(bodyParser.urlencoded({ extended: false }));
-// app.use(bodyParser.raw({ type: 'multipart/form-data' }));
-// app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
 app.use(bodyParser.json());
 
@@ -33,21 +30,6 @@ app.use(bodyParser.json());
     });
 })();
 
-app.get('/dev*/', function root(req, res) {
-    res.setHeader('Content-Type', 'application/json');
-    res.send(JSON.stringify({ a: 1, b: 2 }));
-});
-
-app.post('/api', function root(req, res) {
-    res.setHeader('Content-Type', 'plain/text');
-    console.log(req.body);
-    if (req.body.text) {
-        // res.send(" > " + new Date().getTime() + " - " + req.body.text);
-        res.send("Hello, " + req.body.text);
-    } else {
-        res.send(new Date());
-    }
-});
 
 app.get(/.*/, function root(req, res) {
     res.sendFile(__dirname + '/index.html');
