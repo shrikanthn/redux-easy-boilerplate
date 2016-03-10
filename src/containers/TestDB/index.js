@@ -5,13 +5,25 @@ import './style.scss';
 
 import { BarChart } from 'components/BarChart';
 
-import * as actionCreators from 'actions/charts';
+import * as actionCreators1 from 'actions/charts';
+import * as actionCreators2 from 'actions/survey';
 
 
-@connect(
-    state => state.charts,
-    dispatch => bindActionCreators(actionCreators, dispatch)
-)
+function mapStateToProps(state) {
+	return { 
+    	charts: state.charts,
+    	survey: state.survey,
+    };
+}
+
+function mapDispatchToProps(dispatch) {
+	return { 
+    	chartsAction : bindActionCreators(actionCreators1, dispatch),
+    	surveyAction : bindActionCreators(actionCreators2, dispatch),
+    };
+}
+
+@connect(mapStateToProps, mapDispatchToProps)
 export class TestDB extends Component {
     constructor(props) {
         super(props);
@@ -19,7 +31,14 @@ export class TestDB extends Component {
 
     static propTypes = {
         dispatch: React.PropTypes.func,
-        addBarChartData: React.PropTypes.func,
+        survey: React.PropTypes.object,
+        charts: React.PropTypes.object,
+        chartsAction: React.PropTypes.object,
+        surveyAction: React.PropTypes.object,
+    };
+
+    componentDidMount() {
+    	
     };
 
     renderSampleChart = (event) => {
@@ -30,7 +49,7 @@ export class TestDB extends Component {
             { label: 75, value: 65 },
             { label: 100, value: 90 },
         ];
-        this.props.addBarChartData(sampleData);
+        this.props.chartsAction.addBarChartData(sampleData);
     };
     
     renderSampleChart2 = (event) => {
@@ -39,14 +58,17 @@ export class TestDB extends Component {
             { label: 75, value: 65 },
             { label: 100, value: 90 },
         ];
-        this.props.addBarChartData(sampleData);
+        this.props.chartsAction.addBarChartData(sampleData);
     };
 
     submitData = (event) => {
-
-    	alert('test');
-
+    	// alert('test');
+    	
     };
+
+    handleChange = (event) => {
+		this.props.surveyAction.dumpCSV(event.target.value);
+	};
 
     render() {
         const chartStyle = {
@@ -57,7 +79,9 @@ export class TestDB extends Component {
             <div className='container'>
 	            <div className='row-fluid'>	            	
 		        	<h5>Enter the copied excel data </h5>
-		            <div> <textarea id='txtDataPayload' value='' defaultValue=''></textarea> </div>
+		            <div> <textarea id='txtDataPayload' ref='txtDataPayload'
+		            	onChange={this.handleChange} value={this.props.survey.csvDump} defaultValue='' />
+		            </div>
 		        </div>
 		        <div className='row-fluid'>
 		            <button ref="btnRenderSampleChart" className='btn btn-primary' onClick={this.renderSampleChart}>Sample Chart</button> &nbsp;
@@ -65,7 +89,7 @@ export class TestDB extends Component {
 		            <button ref="btnSubmitData" className='btn btn-success' onClick={this.submitData}>Submit</button>
 		        </div>
 		        <div className='row-fluid'>
-		         	<BarChart {...this.props} />
+		         	<BarChart barChart={this.props.charts.barChart} />
 		        </div>
             </div>
         );
