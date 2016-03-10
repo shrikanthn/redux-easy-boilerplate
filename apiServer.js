@@ -1,8 +1,10 @@
+import { DBUtils } from './src/utils/DBUtils';
+
 const http = require('http');
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const DBUtils = require('./src/utils/DBUtils');
+
 const dbObj = new DBUtils();
 
 
@@ -27,9 +29,7 @@ app.post('/api', function root(req, res) {
 });
 
 app.get('/api/getAllAnswers/', function root(req, res) {
-    res.setHeader('Content-Type', 'plain/text');
-    
-    dbObj.getAllSurveyResults();
+    dbObj.getAllSurveyResults(res);
 });
 
 app.post('/postCSV', function root(req, res) {
