@@ -10,9 +10,8 @@ export function DBUtils() {
     }
 
     this.getAllSurveyResults = function(res) {
-
+        this.setApiHeaders(res);
         let db = this.getDB();
-        res.setHeader('Content-Type', 'application/json');
         db.all("SELECT * FROM answers", function(err, row) {
             if (!err) {
                 console.log(row.length);
@@ -22,6 +21,12 @@ export function DBUtils() {
             }
         });
         db.close();
+    };
+
+    this.setApiHeaders = function(res) {
+        res.setHeader('Content-Type', 'application/json');
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
     };
 
     this.processAvgData = function(rows) {
@@ -41,7 +46,7 @@ export function DBUtils() {
 
 
     this.getAllSurveyCount = function(res) {
-
+        this.setApiHeaders(res);
         let db = this.getDB();
         db.all("SELECT * FROM answer_per_survey", function(err, row) {
             res.setHeader('Content-Type', 'application/json');
@@ -57,18 +62,30 @@ export function DBUtils() {
 
 
     this.getTeamAverages = function(res) {
-
+        this.setApiHeaders(res);
         let db = this.getDB();
         let processData = this.processAvgData;
         db.all("SELECT * FROM team_average", function(err, row) {
-            res.setHeader('Content-Type', 'application/json');
-            res.header("Access-Control-Allow-Origin", "*");
-            res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
             if (!err) {
                 console.log('Sending rows : ' + row.length);
                 res.send(processData(row));
             } else {
                 console.log(err);
+                res.send(err);
+            }
+        });
+        db.close();
+    };
+
+    this.getSurveyResultsByDate = function(sprint_date, res) {
+        this.setApiHeaders(res);
+        let db = this.getDB();
+        res.setHeader('Content-Type', 'application/json');
+        db.all("SELECT answerid, a1, a2, a3, a4, date(createdOn) as ts FROM answers where date(createdOn) == '" + sprint_date + "'", function(err, row) {
+            if (!err) {
+                console.log(row.length);
+                res.send(row);
+            } else {
                 res.send(err);
             }
         });
