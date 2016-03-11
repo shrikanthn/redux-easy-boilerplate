@@ -65,9 +65,10 @@ export function fetchAnswerCount(survey) {
 
         return fetch(COUNT_URL)
             .then(response => response.json())
-            .then(data =>
-                dispatch(receiveAnswerCount(survey, data))
-            );
+            .then(function(data) {
+                dispatch(receiveAnswerCount(survey, data));
+                dispatch(setCurrentSprint(data[0]['survey_date']));
+            })
     };
 }
 
