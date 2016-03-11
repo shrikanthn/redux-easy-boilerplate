@@ -42,28 +42,30 @@ app.get('/api/getSurveyResultsByDate', function root(req, res) {
         dbObj.getSurveyResultsByDate(req.query.sprint_date, res);
     }
 });
+app.post('/api/cleanSurveyByDate', function root(req, res) {
+    if (!!req.query && !!req.query.sprint_date) {
+        dbObj.cleanSurveyResultsByDate(req.query.sprint_date, res);
+    }
+});
+app.post('/api/postCSV', function root(req, res) {
 
-app.post('/postCSV', function root(req, res) {
+    let parsedData = [];
 
     if (req.body.text) {
 
-
-        var parse = require('csv-parse');
-        
-        var input = '#Welcome\n"1","2","3","4"\n"a","b","c","d"';
-        parse(req.body.text, {comment: '#', delimiter: '\t'}, function(err, output){
+        let parse = require('csv-parse');
+        parse(req.body.text, {comment: '#', delimiter: '\t' }, function(err, output){
             console.log(output);
-            
-            res.setHeader('Content-Type', 'application/json');
-            res.send(output);
-          // output.should.eql([ [ '1', '2', '3', '4' ], [ 'a', 'b', 'c', 'd' ] ]);
+            dbObj.insertSurveyAnswers(output, res);
         });
-
-
-    } else {
-        res.send(new Date());
+    }
+    else {
+        res.header("Access-Control-Allow-Origin", "*");
+        res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+        res.send('Nothig to save!');
     }
 });
+
 
 app.get(/.*/, function root(req, res) {
 	res.setHeader('Content-Type', 'plain/text');
