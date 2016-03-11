@@ -49,7 +49,6 @@ export function DBUtils() {
         this.setApiHeaders(res);
         let db = this.getDB();
         db.all("SELECT * FROM answer_per_survey", function(err, row) {
-            res.setHeader('Content-Type', 'application/json');
             if (!err) {
                 res.send(row);
             } else {
@@ -80,11 +79,39 @@ export function DBUtils() {
     this.getSurveyResultsByDate = function(sprint_date, res) {
         this.setApiHeaders(res);
         let db = this.getDB();
-        res.setHeader('Content-Type', 'application/json');
         db.all("SELECT answerid, a1, a2, a3, a4, date(createdOn) as ts FROM answers where date(createdOn) == '" + sprint_date + "'", function(err, row) {
             if (!err) {
                 console.log(row.length);
                 res.send(row);
+            } else {
+                res.send(err);
+            }
+        });
+        db.close();
+    };
+
+
+    this.insertSurveyAnswers = function(results, response) {
+        this.setApiHeaders(response);
+        let db = this.getDB();
+        let stmt = db.prepare('insert into answers (a1, a2, a3, a4) values (?, ?, ?, ?)');
+
+        const template = 'insert into answers (a1, a2, a3, a4) values (';
+        for (var i in results) {
+            let row = results[i];
+            stmt.run(row[0], row[1], row[2], row[3]);
+        }
+        stmt.finalize();
+        db.close();
+        response.send({'OK' : 'OK'});
+    };
+
+    this.cleanSurveyResultsByDate = function(sprint_date, res) {
+        this.setApiHeaders(res);
+        let db = this.getDB();
+        db.run("delete from answers where date(createdOn) = '" + sprint_date + "'", function(err, row) {
+            if (!err) {
+                res.send({success : 'Deleted survey for ' + sprint_date});
             } else {
                 res.send(err);
             }
