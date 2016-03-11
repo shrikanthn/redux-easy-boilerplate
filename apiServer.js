@@ -37,6 +37,11 @@ app.get('/api/getAllSurveyCount', function root(req, res) {
 app.get('/api/getTeamAverages', function root(req, res) {
     dbObj.getTeamAverages(res);
 });
+app.get('/api/getSurveyResultsByDate', function root(req, res) {
+    if (!!req.query && !!req.query.sprint_date) {
+        dbObj.getSurveyResultsByDate(req.query.sprint_date, res);
+    }
+});
 
 app.post('/postCSV', function root(req, res) {
 
