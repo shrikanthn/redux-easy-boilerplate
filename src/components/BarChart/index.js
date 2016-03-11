@@ -17,7 +17,7 @@ export class BarChart extends Component {
 
             return ( <D3.BarChart
 				data={this.props.barChart}
-				width={this.props.width || 400}
+				width={this.props.width || 800}
 				height={200}
 				fill={this.props.color || '#3182bd'}
 				title={this.props.title || 'Bar Chart'} />)
@@ -29,6 +29,7 @@ export class BarChart extends Component {
     render() {
         const chartStyle = {
             height: '250px',
+            'margin-top': '30px',
         };
         const chartId = this.props.id || "barChart";
         return (
