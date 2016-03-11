@@ -36,56 +36,6 @@ export class SurveyResults extends Component {
     	
     };
 
-    getTeamAverages = (event) => {
-        this.props.surveyAction.fetchAverages({});
-    };
-
-    submitData = (event) => {
-    	
-    };
-
-    handleChange = (event) => {
-		this.props.surveyAction.dumpCSV(event.target.value);
-	};
-
-	formatDataForBarChart(key) {
-		let arr = [];
-		if (!!this.props.survey.averages && this.props.survey.averages.length > 1) {
-			for (var i in this.props.survey.averages) {
-				let obj1 = this.props.survey.averages[i];
-				arr.push({ label: obj1.ts, value: obj1[key] });
-			}
-		}
-		return arr;
-	};
-
-    renderBarCharts() {
-        if (!this.props.survey.averages || this.props.survey.averages.length < 2) {
-            return <span />
-        }
-        return (
-            <div className='row-fluid'>
-                <h3>Team Averages</h3>
-                <div className='row-fluid'>
-                    <BarChart title='Fun' color='#93B69A' id='funChart' width={800}
-                        barChart={this.formatDataForBarChart('a1')} />
-                </div>
-                <div className='row-fluid'>
-                    <BarChart title='Focus' color='#F78F20' id='focusChart'
-                        barChart={this.formatDataForBarChart('a4')} />
-                </div>
-                <div className='row-fluid'>
-                    <BarChart title='Performance' color='#1F5463' id='performanceChart'
-                        barChart={this.formatDataForBarChart('a2')} />
-                </div>
-                <div className='row-fluid'>
-                    <BarChart title='Planning' id='planningChart'
-                        barChart={this.formatDataForBarChart('a3')} />
-                </div>
-            </div>
-        )
-    };
-
     setCurrentSprint(obj) {
         if (!!obj && !!obj.newValue) {
             this.props.surveyAction.setCurrentSprint(obj.newValue);
@@ -162,18 +112,62 @@ export class SurveyResults extends Component {
         )
     };
 
+    formatDataForBarChart(obj) {
+        let arr = [];
+        arr.push({ label: 'fun', value: obj.a1 });
+        arr.push({ label: 'perf', value: obj.a2 });
+        arr.push({ label: 'plan', value: obj.a3 });
+        arr.push({ label: 'focus', value: obj.a4 });
+        arr.push({ label: 'scale', value: 10 });
+        return arr;
+    };
+
+    getRandomColor() {
+        var letters = '0123456789ABCDEF'.split('');
+        var color = '#';
+        for (var i = 0; i < 6; i++ ) {
+            color += letters[Math.floor(Math.random() * 16)];
+        }
+        return color;
+    };
+
+    renderIndividualBarChart(color, title, data, width) {
+        return (
+            <div className='col-md-4'>
+                <BarChart title={title} color={color} id={title} width={width} 
+                    barChart={data} />
+            </div>
+        )
+    };
+
+    renderBarCharts() {
+        if (!!this.props.survey.answers && this.props.survey.answers.length < 2) {
+            return <span />
+        }
+        let index = 0;
+        let self = this;
+        const width = 300;
+        return this.props.survey.answers.map(function(answer) {
+            return self.renderIndividualBarChart(
+                self.getRandomColor(), 
+                ('Person' + index++),
+                self.formatDataForBarChart(answer),
+                width
+            )
+        })
+    };
+
     render() {
         return (
             <section>
                 <Header />
                 <div className='container'>
                     <div className='row-fluid'>
-                        <h3>Survey Results</h3>
-                        <button ref="btnTeamAverages" className='btn btn-primary' onClick={this.getTeamAverages}>Team Averages</button> &nbsp;
                         <button ref="btnTeamAverages" className='btn btn-success' onClick={this.getCurrentSurveyAnswers}>Individual Answers</button>
                         {this.renderDropDown()}
                     </div>
-                    {this.renderCurrentSurveyChart()} {this.renderBarCharts()}
+                    {this.renderCurrentSurveyChart()}
+                    <div className='row-fluid'> {this.renderBarCharts()} </div>
                 </div>
             </section>
         );
