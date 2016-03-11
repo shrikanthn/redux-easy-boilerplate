@@ -2,11 +2,10 @@ import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
 import './style.scss';
-
 import { BarChart } from 'components/BarChart';
-
 import * as actionCreators1 from 'actions/charts';
 import * as actionCreators2 from 'actions/survey';
+import { Header } from 'components/Header';
 
 
 function mapStateToProps(state) {
@@ -75,22 +74,25 @@ export class TestDB extends Component {
         };
 
         return (
-			<div className='container'>
-			    <div className='row-fluid'>
-			        <h5>Enter the copied excel data </h5>
-			        <div>
-			            <textarea id='txtDataPayload' ref='txtDataPayload' onChange={this.handleChange} value={this.props.survey.csvDump} defaultValue='' />
-			        </div>
-			    </div>
-			    <div className='row-fluid'>
-			        <button ref="btnRenderSampleChart" className='btn btn-primary' onClick={this.renderSampleChart}>Sample Chart</button> &nbsp;
-			        <button ref="btnGet" className='btn btn-primary' onClick={this.renderSampleChart2}>Sample Chart2</button> &nbsp;
-			        <button ref="btnSubmitData" className='btn btn-success' onClick={this.submitData}>Submit</button>
-			    </div>
-			    <div className='row-fluid'>
-			        <BarChart barChart={this.props.charts.barChart} />
-			    </div>
-			</div>
+            <section>
+                <Header />
+    			<div className='container'>
+    			    <div className='row-fluid'>
+    			        <h5>Enter the copied excel data </h5>
+    			        <div>
+    			            <textarea id='txtDataPayload' ref='txtDataPayload' onChange={this.handleChange} value={this.props.survey.csvDump} defaultValue='' />
+    			        </div>
+    			    </div>
+    			    <div className='row-fluid'>
+    			        <button ref="btnRenderSampleChart" className='btn btn-primary' onClick={this.renderSampleChart}>Sample Chart</button> &nbsp;
+    			        <button ref="btnGet" className='btn btn-primary' onClick={this.renderSampleChart2}>Sample Chart2</button> &nbsp;
+    			        <button ref="btnSubmitData" className='btn btn-success' onClick={this.submitData}>Submit</button>
+    			    </div>
+    			    <div className='row-fluid'>
+    			        <BarChart barChart={this.props.charts.barChart} />
+    			    </div>
+    			</div>
+            </section>
         );
     }
 }

@@ -5,6 +5,8 @@ import { BarChart } from 'components/BarChart';
 import { DropDown } from 'components/DropDown';
 import * as actionCreators from 'actions/survey';
 import * as D3 from 'react-d3';
+import { Header } from 'components/Header';
+import './style.scss';
 
 function mapStateToProps(state) {
 	return { 
@@ -132,18 +134,8 @@ export class SurveyResults extends Component {
         if (!this.props.survey.answers || this.props.survey.answers.length < 2) {
             return <span />
         }
-        const chartStyle = {
-            height: '230px',
-            'margin-top': '30px',
-        };
-        const tblClass = {
-            'margin-top': '20px',
-            'font-weight': 'bold',
-            'width': '500px',
-
-        };
         return (
-            <div className='row-fluid'>
+            <div className='row-fluid' id='currentSprintPerformance'>
                 <h3>Sprint Performance for {this.props.survey.currentSprint}</h3>
                 <div className='row-fluid'>
                     <D3.LineChart
@@ -151,17 +143,19 @@ export class SurveyResults extends Component {
                       data={this.processDataForLineChart()}
                       width={800}
                       height={300}
-                      title="Line Chart"
+                      title=""
                     />
                 </div>
                 <div className='row-fluid'>
-                    <table style={tblClass}>
+                    <table id='tblLegend'>
+                        <tbody>
                         <tr>
                             <td>10 = fun</td>
                             <td>20 = personal performance</td>
-                            <td>30 planning</td>
+                            <td>30 = planning</td>
                             <td>40 = focus</td>
                         </tr>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -170,18 +164,18 @@ export class SurveyResults extends Component {
 
     render() {
         return (
-			<div className='container'>
-			    <div className='row-fluid'>
-                    <h3>Survey Results</h3>
-			         <button ref="btnTeamAverages" className='btn btn-primary'
-                        onClick={this.getTeamAverages}>Team Averages</button> &nbsp;
-                    <button ref="btnTeamAverages" className='btn btn-success'
-                        onClick={this.getCurrentSurveyAnswers}>Individual Answers</button>
-                    {this.renderDropDown()}
-			    </div>	
-                {this.renderCurrentSurveyChart()}
-                {this.renderBarCharts()}		    
-			</div>
+            <section>
+                <Header />
+                <div className='container'>
+                    <div className='row-fluid'>
+                        <h3>Survey Results</h3>
+                        <button ref="btnTeamAverages" className='btn btn-primary' onClick={this.getTeamAverages}>Team Averages</button> &nbsp;
+                        <button ref="btnTeamAverages" className='btn btn-success' onClick={this.getCurrentSurveyAnswers}>Individual Answers</button>
+                        {this.renderDropDown()}
+                    </div>
+                    {this.renderCurrentSurveyChart()} {this.renderBarCharts()}
+                </div>
+            </section>
         );
     }
 }

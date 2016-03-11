@@ -1,11 +1,10 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 import DocumentMeta from 'react-document-meta';
-
 import { Items } from 'components/Items';
 import { AddItem } from 'components/AddItem';
+import { Header } from 'components/Header';
 
 /* actions */
 import * as actionCreators from 'actions/items';
@@ -34,6 +33,7 @@ export class List extends Component {
   render() {
     return (
       <section>
+        <Header />
         <DocumentMeta {...metaData} />
         <div className="container">
 
