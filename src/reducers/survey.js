@@ -66,6 +66,17 @@ export function survey(state = initialState, action) {
                 ...state,
                 averages: action.averages,
             };
+        case 'RECEIVE_ANSWERS_FOR_SPRINT':
+            return {
+                ...state,
+                answers: action.answers,
+            };
+
+        case 'RECEIVE_ANSWER_COUNT':
+            return {
+                ...state,
+                answer_count_per_survey: action.answer_count,
+            };
 
         default:
             return state;
