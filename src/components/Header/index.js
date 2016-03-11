@@ -9,24 +9,12 @@ export class Header extends Component {
       <nav className="navbar navbar-default navbar-fixed-top">
           <div className="container-fluid">
               <div className="navbar-header">
-                  <Link to="/home" className="navbar-brand"> HDP Sprint Retro
+                  <Link to="/" className="navbar-brand"> HDP Sprint Retro</Link>
+                  <Link to="/home" className="btn btn-default navbar-btn">Home </Link>
+                  <Link to="/list" className="btn btn-default navbar-btn"> Sample Redux</Link>
+                  <Link to="/testdb" className="btn btn-default navbar-btn"> Redux-TestDB</Link>
+                  <Link to="/surveyResults" className="btn btn-default navbar-btn"> Survey Results
                   </Link>
-                  <button type="button" className="btn btn-default navbar-btn">
-                      <Link to="/"> Home
-                      </Link>
-                  </button>
-                  <button type="button" className="btn btn-default navbar-btn">
-                      <Link to="/list"> Sample Redux
-                      </Link>
-                  </button>
-                  <button type="button" className="btn btn-default navbar-btn">
-                      <Link to="/testdb"> Redux-TestDB
-                      </Link>
-                  </button>
-                  <button type="button" className="btn btn-default navbar-btn">
-                      <Link to="/surveyResults"> Survey Results
-                      </Link>
-                  </button>
               </div>
           </div>
       </nav>
