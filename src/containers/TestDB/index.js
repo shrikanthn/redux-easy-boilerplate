@@ -61,7 +61,7 @@ export class TestDB extends Component {
     };
 
     submitData = (event) => {
-    	
+        this.props.surveyAction.postCSV(this.props.survey.csvDump);
     };
 
     handleChange = (event) => {

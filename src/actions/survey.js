@@ -2,6 +2,7 @@ const API_URL = 'http://localhost:9999/api';
 const AVG_URL = API_URL + '/getTeamAverages';
 const COUNT_URL = API_URL + '/getAllSurveyCount';
 const ANSWER_URL = API_URL + '/getSurveyResultsByDate';
+const POST_CSV_URL = API_URL + '/postCSV';
 
 export function submitSurveyAnswer(surveyAnswers) {
     return {
@@ -97,8 +98,47 @@ export function fetchAnswerForSurvey(sprintDate) {
 }
 
 export function setCurrentSprint(sprint_date) {
+
+    return function(dispatch) {
+
+        dispatch(setSprintDate(sprint_date));
+        dispatch(fetchAnswerForSurvey(sprint_date));
+    };
+}
+
+function setSprintDate(sprint_date) {
     return {
         type: 'SET_CURRENT_SPRINT',
         currentSprint : sprint_date,
+    };
+}
+
+export function receivePostCSVResponse(jsonData) {
+    console.log('end fetch on : ' + Date.now());
+    console.log(jsonData);
+    return {
+        type: 'POST_ANSWERS',
+        receivedAt: Date.now(),
+    };
+}
+
+export function postCSV(csvPayload) {
+
+    return function(dispatch) {
+
+        dispatch(requestItems());
+
+        return  fetch(POST_CSV_URL, {
+                method: 'post',
+                headers: {
+                  'Accept': 'application/json, application/xml, text/play, text/html, *.*',
+                  'Content-Type': 'application/x-www-form-urlencoded; charset=utf-8',
+                },
+                body: 'text' + '=' + csvPayload,
+            })
+            .then(response => response.json())
+            .then(data =>
+                dispatch(receivePostCSVResponse({}, data))
+            );
     };
 }
