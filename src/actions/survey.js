@@ -1,6 +1,7 @@
 const API_URL = 'http://localhost:9999/api';
 const AVG_URL = API_URL + '/getTeamAverages';
 const COUNT_URL = API_URL + '/getAllSurveyCount';
+const ANSWER_URL = API_URL + '/getSurveyResultsByDate';
 
 export function submitSurveyAnswer(surveyAnswers) {
     return {
@@ -66,6 +67,30 @@ export function fetchAnswerCount(survey) {
             .then(response => response.json())
             .then(data =>
                 dispatch(receiveAnswerCount(survey, data))
+            );
+    };
+}
+
+export function receiveAnswers(sprintDate, jsonData) {
+    console.log('end fetch on : ' + Date.now());
+    return {
+        type: 'RECEIVE_ANSWERS_FOR_SPRINT',
+        sprintDate,
+        answers: jsonData,
+        receivedAt: Date.now(),
+    };
+}
+
+export function fetchAnswerForSurvey(sprintDate) {
+
+    return function(dispatch) {
+
+        dispatch(requestItems());
+
+        return fetch(ANSWER_URL+"?sprint_date="+sprintDate)
+            .then(response => response.json())
+            .then(data =>
+                dispatch(receiveAnswers(sprintDate, data))
             );
     };
 }
