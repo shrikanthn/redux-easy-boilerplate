@@ -1,41 +1,35 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router';
 
-/* component styles */
 import { styles } from './styles.scss';
 
 export class Header extends Component {
   render() {
     return (
-      <header className={`${styles}`}>
-        <div className="container">
-          <div className="row">
-            <div className="col-xs-5 col-sm-3 col-md-3 col-lg-3 logo">
-              <Link to="/">
-                Redux Boilerplate
-              </Link>
-            </div>
-
-            <div className="col-xs-5 col-sm-5 col-md-5 col-lg-5">
-              <nav>
-                <Link to="/home" activeClassName="active">
-                  Home
-                </Link>
-                <Link to="/list" activeClassName="active">
-                  Redux
-                </Link>
-                <Link to="/testdb" activeClassName="active">
-                  TestDB
-                </Link>
-                <Link to="/surveyResults" activeClassName="active">
-                  Survey Results
-                </Link>
-              </nav>
-            </div>
-
+      <nav className="navbar navbar-default navbar-fixed-top">
+          <div className="container-fluid">
+              <div className="navbar-header">
+                  <Link to="/home" className="navbar-brand"> HDP Sprint Retro
+                  </Link>
+                  <button type="button" className="btn btn-default navbar-btn">
+                      <Link to="/"> Home
+                      </Link>
+                  </button>
+                  <button type="button" className="btn btn-default navbar-btn">
+                      <Link to="/list"> Sample Redux
+                      </Link>
+                  </button>
+                  <button type="button" className="btn btn-default navbar-btn">
+                      <Link to="/testdb"> Redux-TestDB
+                      </Link>
+                  </button>
+                  <button type="button" className="btn btn-default navbar-btn">
+                      <Link to="/surveyResults"> Survey Results
+                      </Link>
+                  </button>
+              </div>
           </div>
-        </div>
-      </header>
+      </nav>
     );
   }
 }
