@@ -27,6 +27,11 @@ export class DropDown extends Component {
         surveyAction: React.PropTypes.object,
         valueField: React.PropTypes.string,
         labelField: React.PropTypes.string,
+        onChange: React.PropTypes.func.isRequired,
+    };
+
+    componentDidMount() {
+    	this.props.surveyAction.fetchAnswerCount({});
     };
 
     getOptionItems() {
@@ -46,21 +51,18 @@ export class DropDown extends Component {
     	}
         return (
             <select id={this.props.id} 
-                    className='form-control' 
-                    onChange={this.handleChange} >
+                    className='form-control'
+                    onChange={this.handleChange.bind(this)} >
                 {this.getOptionItems()}
             </select>
         )
     };
 
     handleChange(e) {
-        if (this.props.onChange) {
-            var change = {
-              oldValue: this.state.selected,
-              newValue: e.target.value
-            }
-            this.props.onChange(change);
+        const change = {
+          oldValue: this.props.survey.currentSprint,
+          newValue: e.target.value,
         }
-        alert(e.target.value);
+        this.props.onChange(change);
     };
 };
