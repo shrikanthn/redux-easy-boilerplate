@@ -1,12 +1,10 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-
 import { BarChart } from 'components/BarChart';
 import { DropDown } from 'components/DropDown';
-
 import * as actionCreators from 'actions/survey';
-
+import * as D3 from 'react-d3';
 
 function mapStateToProps(state) {
 	return { 
@@ -67,7 +65,7 @@ export class SurveyResults extends Component {
             <div className='row-fluid'>
                 <h3>Team Averages</h3>
                 <div className='row-fluid'>
-                    <BarChart title='Fun' color='#93B69A' id='funChart'
+                    <BarChart title='Fun' color='#93B69A' id='funChart' width={800}
                         barChart={this.formatDataForBarChart('a1')} />
                 </div>
                 <div className='row-fluid'>
@@ -84,31 +82,104 @@ export class SurveyResults extends Component {
                 </div>
             </div>
         )
-    }
+    };
+
+    setCurrentSprint(obj) {
+        if (!!obj && !!obj.newValue) {
+            this.props.surveyAction.setCurrentSprint(obj.newValue);
+            this.props.surveyAction.receiveAnswers(obj.newValue, [{ a1:0, a2:0, a3:0, a4:0, ts:0}]);
+        }
+    };
+
+    renderDropDown() {
+        return (
+            <div className='col-md-4'>
+                <div className='col-md-3'>
+                    <label>Current Survey</label>
+                </div>
+                <div className='col-md-7'>
+                    <DropDown id='myDropdown'
+                        labelField='survey_date'
+                        valueField='survey_date'
+                        onChange={this.setCurrentSprint.bind(this)} />
+                </div>
+            </div>
+        )
+    };
+
+    getCurrentSurveyAnswers = (event) => {
+        this.props.surveyAction.fetchAnswerForSurvey(this.props.survey.currentSprint);
+    };
+
+    processDataForLineChart() {
+        let data = [];
+        for (let i in this.props.survey.answers) {
+            let obj1 = this.props.survey.answers[i];
+            data.push({
+                name: "person" + i,
+                values: [
+                    { x: 10, y: obj1.a1 },
+                    { x: 20, y: obj1.a2 },
+                    { x: 30, y: obj1.a3 },
+                    { x: 40, y: obj1.a4 },
+                 ]
+            });
+        }
+        return data;
+    };
+
+    renderCurrentSurveyChart() {
+        if (!this.props.survey.answers || this.props.survey.answers.length < 2) {
+            return <span />
+        }
+        const chartStyle = {
+            height: '230px',
+            'margin-top': '30px',
+        };
+        const tblClass = {
+            'margin-top': '20px',
+            'font-weight': 'bold',
+            'width': '500px',
+
+        };
+        return (
+            <div className='row-fluid'>
+                <h3>Sprint Performance for {this.props.survey.currentSprint}</h3>
+                <div className='row-fluid'>
+                    <D3.LineChart
+                      legend={true}
+                      data={this.processDataForLineChart()}
+                      width={800}
+                      height={300}
+                      title="Line Chart"
+                    />
+                </div>
+                <div className='row-fluid'>
+                    <table style={tblClass}>
+                        <tr>
+                            <td>10 = fun</td>
+                            <td>20 = personal performance</td>
+                            <td>30 planning</td>
+                            <td>40 = focus</td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+        )
+    };
 
     render() {
-        const chartStyle = {
-            height: '250px',
-        };
-
-        let dropDownOnChange = function(change) {
-            alert('onChangeForSelect:\noldValue: ' + 
-                    change.oldValue + 
-                    '\nnewValue: ' 
-                    + change.newValue);
-        };
-
         return (
 			<div className='container'>
 			    <div className='row-fluid'>
                     <h3>Survey Results</h3>
-			        <button ref="btnTeamAverages" className='btn btn-primary' onClick={this.getTeamAverages}>Team Averages</button> &nbsp;
-                    <DropDown id='myDropdown' 
-                        value='b'
-                        labelField='survey_date'
-                        valueField='survey_date'
-                        onChange={dropDownOnChange} />
+			         <button ref="btnTeamAverages" className='btn btn-primary'
+                        onClick={this.getTeamAverages}>Team Averages</button> &nbsp;
+                    <button ref="btnTeamAverages" className='btn btn-success'
+                        onClick={this.getCurrentSurveyAnswers}>Individual Answers</button>
+                    {this.renderDropDown()}
 			    </div>	
+                {this.renderCurrentSurveyChart()}
                 {this.renderBarCharts()}		    
 			</div>
         );
