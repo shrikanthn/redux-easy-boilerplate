@@ -16,4 +16,4 @@ date(createdOn) as sprint_date from answers group by date(createdOn);
 
  
 create view answer_per_survey as 
-SELECT date(createdOn) as sprint_date, count(*) as count FROM answers group by date(createdOn);
+SELECT date(createdOn) as sprint_date, count(*) as count FROM answers group by date(createdOn) order by date(createdOn) desc;
