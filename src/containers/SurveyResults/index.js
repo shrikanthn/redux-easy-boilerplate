@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { BarChart } from 'components/BarChart';
+import { BarChartWrapper } from 'components/BarChartWrapper';
 import { DropDown } from 'components/DropDown';
 import * as actionCreators from 'actions/survey';
 import * as D3 from 'react-d3';
@@ -112,14 +112,19 @@ export class SurveyResults extends Component {
         )
     };
 
-    formatDataForBarChart(obj) {
+    formatDataForBarChart(obj, title) {
         let arr = [];
-        arr.push({ label: 'fun', value: obj.a1 });
-        arr.push({ label: 'perf', value: obj.a2 });
-        arr.push({ label: 'plan', value: obj.a3 });
-        arr.push({ label: 'focus', value: obj.a4 });
-        arr.push({ label: 'scale', value: 10 });
-        return arr;
+        arr.push({ x: 'fun', y: obj.a1, });
+        arr.push({ x: 'perf', y: obj.a2, });
+        arr.push({ x: 'plan', y: obj.a3, });
+        arr.push({ x: 'focus', y: obj.a4, });
+        arr.push({ x: 'scale', y: 10, });
+        return [
+            {
+                name: title,
+                values: arr,
+            },
+        ];
     };
 
     getRandomColor() {
@@ -134,7 +139,7 @@ export class SurveyResults extends Component {
     renderIndividualBarChart(color, title, data, width) {
         return (
             <div className='col-md-4'>
-                <BarChart title={title} color={color} id={title} width={width} 
+                <BarChartWrapper title={title} color={color} id={title} width={width} 
                     barChart={data} />
             </div>
         )
@@ -157,6 +162,27 @@ export class SurveyResults extends Component {
         })
     };
 
+    processDataForStackedChart() {
+
+        let output = [];
+        const keys = ['a1', 'a2', 'a3', 'a4'];
+        const self = this;
+        let index=1;
+        for (let k in keys) {
+            let valuesArr = []
+            for (let i in this.props.survey.answers) {
+                let obj = this.props.survey.answers[i];
+                valuesArr.push({ x: i, y: obj[keys[k]] });
+            }
+            output.push({ 
+                name: keys[k],
+                values: valuesArr
+            });
+
+        }
+        return output;
+    }
+
     render() {
         return (
             <section>
@@ -167,7 +193,17 @@ export class SurveyResults extends Component {
                         {this.renderDropDown()}
                     </div>
                     {this.renderCurrentSurveyChart()}
-                    <div className='row-fluid'> {this.renderBarCharts()} </div>
+                    <div className='row-fluid'> 
+                        <BarChartWrapper 
+                            title={'test'} 
+                            color={this.getRandomColor()} 
+                            id={'test'} 
+                            width={800}
+                            height={400}
+                            yAxisTickCount={10}
+                            legend={'---- legend'}
+                            barChart={this.processDataForStackedChart()} />
+                    </div>
                 </div>
             </section>
         );

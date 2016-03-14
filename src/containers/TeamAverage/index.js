@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import { bindActionCreators } from 'redux';
 import { connect } from 'react-redux';
-import { BarChart } from 'components/BarChart';
+import { BarChartWrapper } from 'components/BarChartWrapper';
 import { DropDown } from 'components/DropDown';
 import * as actionCreators from 'actions/survey';
-import * as D3 from 'react-d3';
 import { Header } from 'components/Header';
 
 function mapStateToProps(state) {
@@ -44,10 +43,15 @@ export class TeamAverage extends Component {
 		if (!!this.props.survey.averages && this.props.survey.averages.length > 1) {
 			for (var i in this.props.survey.averages) {
 				let obj1 = this.props.survey.averages[i];
-				arr.push({ label: obj1.ts, value: obj1[key] });
+				arr.push({ x: obj1.ts, y: obj1[key] });
 			}
 		}
-		return arr;
+        return [
+            {
+                name: 'Team Averages',
+                values: arr,
+            },
+        ];
 	};
 
     renderBarCharts() {
@@ -57,19 +61,19 @@ export class TeamAverage extends Component {
         return (
             <div className='row-fluid'>
                 <div className='row-fluid'>
-                    <BarChart title='Fun' color='#93B69A' id='funChart' width={800}
+                    <BarChartWrapper title='Fun' color='#93B69A' id='funChart' width={800}
                         barChart={this.formatDataForBarChart('a1')} />
                 </div>
                 <div className='row-fluid'>
-                    <BarChart title='Focus' color='#F78F20' id='focusChart'
+                    <BarChartWrapper title='Focus' color='#F78F20' id='focusChart'
                         barChart={this.formatDataForBarChart('a4')} />
                 </div>
                 <div className='row-fluid'>
-                    <BarChart title='Performance' color='#1F5463' id='performanceChart'
+                    <BarChartWrapper title='Performance' color='#1F5463' id='performanceChart'
                         barChart={this.formatDataForBarChart('a2')} />
                 </div>
                 <div className='row-fluid'>
-                    <BarChart title='Planning' id='planningChart'
+                    <BarChartWrapper title='Planning' id='planningChart'
                         barChart={this.formatDataForBarChart('a3')} />
                 </div>
             </div>
